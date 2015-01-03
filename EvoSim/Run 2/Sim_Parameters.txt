@@ -1,0 +1,7 @@
+numOfGenerations: 1600.0, maxHealth: 1000, numOfGenerations: 1600.0
+hit 9
+gain 4
+gen size 10
+num of gens 10
+
+I beleive this one had a health cost for every 7 moves

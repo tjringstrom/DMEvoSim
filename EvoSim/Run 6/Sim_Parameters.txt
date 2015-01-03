@@ -1,0 +1,3 @@
+numOfGenerations: 2500.0, maxHealth: 2000, numOfGenerations: 2500.0
+
+This run had the same parameters as run 5 but i accidentally forgot to fix the starting set parameters, so run 7 should fix that.

@@ -1,0 +1,4 @@
+numOfGenerations: 2500.0, maxHealth: 2000, numOfGenerations: 2500.0
+
+This run tests timestep bias and is meant to compliment run 5.  It is the same as 5, but there is no loss of health over time, so you would expect 
+the tsbias gene to be larger as a result becuase it means that there is not as strong of an incentive to get cheese.
