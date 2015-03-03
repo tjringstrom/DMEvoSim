@@ -49,7 +49,11 @@ public class SimState extends GameState {
 	
 
 	public SimState(GameStateManager gsm, MouseBrain mb) {
-		super(gsm);
+		// main functions of this constructor
+		// 1. adds enemies
+		// 2. generates heat map based on enemies
+		// 3. initializes settings for mouse brain
+		super(gsm); // calls the parent constructor i.e. GameState
 		
 		this.enemy1List = new ArrayList<Enemy1>();
 		this.enemy2List = new ArrayList<Enemy2>();
@@ -57,12 +61,12 @@ public class SimState extends GameState {
 			enemy1List.add(new Enemy1(testMap.hexarray[rnd2
 					.nextInt(hexcountx - 1)][rnd2.nextInt(hexcounty - 1)], rnd2
 					.nextInt(6) + 1));
-		}
+		} // adds type 1 enemies randomly
 		for (int i = 0; i < numOfEnemies2; i++) {
 			enemy2List.add(new Enemy2(testMap.hexarray[rnd2
 					.nextInt(hexcountx - 1)][rnd2.nextInt(hexcounty - 1)], rnd2
 					.nextInt(6) + 1, testMap));
-		}
+		} // adds type 2 enemies randomly
 		heatMap.generate(dist, enemy1List);
 		super.gsm.hm = heatMap;
 		System.out.println("enemy traj: " + enemy1List.get(0).traj);
@@ -86,9 +90,10 @@ public class SimState extends GameState {
 	public void tick() {
 		
 		if(timeStepsRemaining == 0){
-			super.gsm.states.remove(0);
+			super.gsm.states.remove(0); // ??? what does this do?
 		}
-		//hunter moves first, then enemy, update numbers, generate heatMap for new enemy locations
+		//  (1) hunter moves first, (2) then enemy, (3) update numbers, (4) generate heatMap for new enemy locations
+		
 		if ((mouseBrain.hunterMoved == true && this.stepOn == false) || (this.mouseBrain.hunterMoved == true && this.stepOn == true && this.step == true)) {
 			mouseBrain.hunterMoved = false;
 //			for (Enemy2 e2 : enemy2List){
@@ -96,21 +101,22 @@ public class SimState extends GameState {
 //			}
 			
 //			mouseBrain.moveHunter();
-			mouseBrain.moveHunterAuto(mouseBrain.makeDecision(dist, mouseBrain.current, cheese.current, pathTable, adist));
+			mouseBrain.moveHunterAuto(mouseBrain.makeDecision(dist, mouseBrain.current, cheese.current, pathTable, adist)); // (1) hunter moves
+			//  Weiwen's comment: perhaps efficient coding can play a role in mouse's movement (above).
 			double t = System.nanoTime();
 			this.shortestPathHunter.run(this.mouseBrain.current);
 			adist = (this.shortestPathHunter.getPath(cheese.current).size() - 1);
 			System.out.println("DijikstraTime: " + (System.nanoTime() - t));
 			System.out.println("DISTANCE TO CHEESE: " + adist);
-			this.moveAndUpdateEnemy1();
+			this.moveAndUpdateEnemy1();    // (2) then enemy moves
 			this.moveAndUpdateEnemy2(); //not currently in game
 			this.cheeseCheck();
-			this.dealDamage();
+			this.dealDamage();   // (3) update numbers
 			decreaseHunger();
 //			if(this.timeStepsRemaining % 6 == 0){
 //				mouseBrain.health--;				
 //			}
-			System.out.println(this.pathTable.getDistance(mouseBrain.current, this.enemy1List.get(0).current));
+			System.out.println(this.pathTable.getDistance(mouseBrain.current, this.enemy1List.get(0).current)); // (4) generate heatmap
 			heatMap.generate(dist, enemy1List);
 			step = false;
 			timeStepsRemaining--;
@@ -145,7 +151,7 @@ public class SimState extends GameState {
 
 	// only move enemies when hunter moved
 	private void moveAndUpdateEnemy1() {
-		
+		//  Weiwen's comment: perhaps efficient coding can play a role in enemy's movement. 
 		for(Enemy1 enemy : enemy1List){
 			if(enemy.fullness == 0){
 				enemy.fastPace++;
