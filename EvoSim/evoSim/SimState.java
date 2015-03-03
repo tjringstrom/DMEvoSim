@@ -136,14 +136,14 @@ public class SimState extends GameState {
 	}
 
 	private void cheeseCheck() {
-		if (mouseBrain.current.equals(cheese.current)) {
-			mouseBrain.gainHealth(4);
+		if (mouseBrain.current.equals(cheese.current)) { // i.e. if mouse and cheese are at the same location
+			mouseBrain.gainHealth(4);                    // ... then mouse gains health
 			if (this.mouseBrain.current
 					.equals(testMap.hexarray[testMap.hexcountx - 1][testMap.hexcounty - 1])) {
 				this.cheese.current = testMap.hexarray[0][0];
 				return;
 			} else if (cheese.current.equals(testMap.hexarray[0][0])) {
-				cheese.current = testMap.hexarray[testMap.hexcountx - 1][testMap.hexcounty - 1];
+				cheese.current = testMap.hexarray[testMap.hexcountx - 1][testMap.hexcounty - 1]; // to check: this moves cheese to the other end of the board?
 				return;
 			}
 		}
@@ -159,7 +159,7 @@ public class SimState extends GameState {
 				if(enemy.fastPace % 6 == 0 && enemy.enemy1state.equals(Enemy1.State.HUNTING)){
 					enemy.moveEnemy1(mouseBrain.current);
 				}
-				if(enemy.fullness == 0){
+				if(enemy.fullness == 0){ // ??? why do you need to have this if condition?
 					enemy.moveEnemy1(mouseBrain.current);
 				}
 				
