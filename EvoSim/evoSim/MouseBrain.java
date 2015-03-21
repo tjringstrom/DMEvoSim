@@ -245,6 +245,13 @@ public class MouseBrain extends Globals{
 		bRiskSamp = new BasicVector(currency);
 		blRiskSamp = new BasicVector(currency);
 		
+		boolean searchul = true;
+		boolean searchu = true;
+		boolean searchur = true;
+		boolean searchbl = true;
+		boolean searchb = true;
+		boolean searchbr = true;
+		
 		for (int i = 0; i < currency; i++) { //index i controls time
 			int radius = 2;
 			System.out.println(i);
@@ -258,12 +265,61 @@ public class MouseBrain extends Globals{
 				System.out.println("asdf: " + getGroupAveRisk(current.getRadialNbr(i, 3), radius, i));
 			}
 			//it is i+1 because the heatmap starts at t=1, that is, there is not 0 time step
-			ulRiskSamp.set(i, getGroupAveRisk(current.getRadialNbr(i, 0), radius, i+1));
-			uRiskSamp.set(i, getGroupAveRisk(current.getRadialNbr(i, 1), radius, i+1));
-			urRiskSamp.set(i, getGroupAveRisk(current.getRadialNbr(i, 2), radius, i+1));
-			brRiskSamp.set(i, getGroupAveRisk(current.getRadialNbr(i, 3), radius, i+1));
-			bRiskSamp.set(i, getGroupAveRisk(current.getRadialNbr(i, 4), radius, i+1));
-			blRiskSamp.set(i, getGroupAveRisk(current.getRadialNbr(i, 5), radius, i+1));
+			if (searchul) {
+				ulRiskSamp.set(i, getGroupAveRisk(current.getRadialNbr(i, 0), radius, i+1));
+			} else {
+				ulRiskSamp.set(i, 999);
+			}
+			if (searchu) {
+				uRiskSamp.set(i, getGroupAveRisk(current.getRadialNbr(i, 1), radius, i+1));
+			} else {
+				uRiskSamp.set(i, 999);
+			}
+			if (searchur) {
+				urRiskSamp.set(i, getGroupAveRisk(current.getRadialNbr(i, 2), radius, i+1));
+			} else {
+				urRiskSamp.set(i, 999);
+			}
+			if (searchbr) {
+				brRiskSamp.set(i, getGroupAveRisk(current.getRadialNbr(i, 3), radius, i+1));
+			} else {
+				brRiskSamp.set(i, 999);
+			}
+			if (searchb) {
+				bRiskSamp.set(i, getGroupAveRisk(current.getRadialNbr(i, 4), radius, i+1));
+			} else {
+				bRiskSamp.set(i, 999);
+			}
+			if (searchbl) {
+				blRiskSamp.set(i, getGroupAveRisk(current.getRadialNbr(i, 5), radius, i+1));
+			} else {
+				blRiskSamp.set(i, 999);
+			}
+			
+			if (i == 0) {
+				double avgRisk = (blRiskSamp.get(i) + bRiskSamp.get(i) + brRiskSamp.get(i) + ulRiskSamp.get(i) + urRiskSamp.get(i) + uRiskSamp.get(i))/6.0;
+				// Question to Tom: Is there a significant chance that Risk samples in all directions will be exactly equal?
+				// Because if so, everything will be equal to the average, and the mouse will search in all three directions.
+				if (blRiskSamp.get(i) > avgRisk) {
+					searchbl = false;
+				}
+				if (bRiskSamp.get(i) > avgRisk) {
+					searchb = false;
+				}
+				if (brRiskSamp.get(i) > avgRisk) {
+					searchbr = false;
+				}
+				if (ulRiskSamp.get(i) > avgRisk) {
+					searchul = false;
+				}
+				if (uRiskSamp.get(i) > avgRisk) {
+					searchu = false;
+				}
+				if (urRiskSamp.get(i) > avgRisk) {
+					searchur = false;
+				}
+			}
+
 			
 //			ulRiskSamp.set(i, heatMap.timeStepMap[i+1][current.radialNbrIDs[i][0]/7]*100);
 //			uRiskSamp.set(i, heatMap.timeStepMap[i+1][current.radialNbrIDs[i][1]/7]*100);
